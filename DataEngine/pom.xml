@@ -10,7 +10,6 @@
     </parent>
 
     <artifactId>DataEngine</artifactId>
-
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -19,7 +18,7 @@
     <dependencies>
         <dependency>
             <groupId>org.mybatis</groupId>
-            <artifactId>mybatis-parent</artifactId>
+            <artifactId>mybatis</artifactId>
             <version>3.5.13</version>
         </dependency>
         <dependency>
@@ -41,7 +40,7 @@
         </dependency>
         <dependency>
             <groupId>cn.hutool</groupId>
-            <artifactId>hutool-parent</artifactId>
+            <artifactId>hutool-all</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

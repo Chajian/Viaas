@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE generatorConfiguration
         PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
@@ -39,7 +38,37 @@
         <!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
         <!--        </table>-->
 
-        <table tableName="t_account" domainObjectName="Account">
+        <table tableName="container" domainObjectName="Container">
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="hardware" domainObjectName="Hardware">
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="image" domainObjectName="Image">
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="order" domainObjectName="Order">
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="packet" domainObjectName="Packet">
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="permission" domainObjectName="Permission">
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="permission_group" domainObjectName="PermissionGroup">
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="permission_group_permission" domainObjectName="PermissionGroupPermission">
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="user_permission_group" domainObjectName="UserPermissionGroup">
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="users" domainObjectName="Users">
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="wallet" domainObjectName="Wallet">
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
 

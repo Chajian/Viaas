@@ -11,27 +11,40 @@
     <modules>
         <module>DataEngine</module>
     </modules>
-
+    <repositories>
+        <repository>
+            <id>aLiYun</id>
+            <url>https://maven.aliyun.com/repository/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <hutool.version>5.8.22</hutool.version>
-        <lombok.verion>1.18.26</lombok.verion>
+        <lombok.version>1.18.30</lombok.version>
         <druid.version>1.1.20</druid.version>
         <mybatis.springboot.version>3.0.2</mybatis.springboot.version>
         <mysql.version>8.0.11</mysql.version>
         <swagger3.version>2.2.0</swagger3.version>
         <mapper.version>4.2.3</mapper.version>
         <fastjson2.version>2.0.40</fastjson2.version>
-        <persistence.api.version>1.0.2</persistence.api.version>
+        <persistence-api.version>1.0.2</persistence-api.version>
         <spring.boot.test.version>3.1.5</spring.boot.test.version>
         <spring.boot.version>3.2.0</spring.boot.version>
         <spring.cloud.version>2023.0.0</spring.cloud.version>
-        <spring.cloud.alibaba.version>2022.0.0.0-RC2</spring.cloud.alibaba.version>
+        <spring.cloud.alibaba.version>2022.0.0.0</spring.cloud.alibaba.version>
+        <micrometer-tracing.version>1.2.0</micrometer-tracing.version>
+        <micrometer-observation.version>1.12.0</micrometer-observation.version>
+        <feign-micrometer.version>12.5</feign-micrometer.version>
+        <zipkin-reporter-brave.version>2.17.0</zipkin-reporter-brave.version>
+        <surefire.plugin.version>3.0.0-M5</surefire.plugin.version> <!-- 添加 surefire 插件版本号 -->
+        <spring-boot.plugin.version>3.1.1</spring-boot.plugin.version> <!-- 添加 spring-boot 插件版本号 -->
     </properties>
 
-<!--    dependencyManager只声明依赖，并不引入依赖，只是规范-->
     <dependencyManagement>
         <dependencies>
             <!-- springboot 3.2.0 -->
@@ -157,7 +170,6 @@
                 <artifactId>zipkin-reporter-brave</artifactId>
                 <version>${zipkin-reporter-brave.version}</version>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 
@@ -167,6 +179,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire.plugin.version}</version>
                 <configuration>
                     <skip>true</skip>
                 </configuration>
