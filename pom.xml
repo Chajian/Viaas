@@ -12,14 +12,8 @@
         <module>DataEngine</module>
         <module>DockerManager</module>
         <module>CertificationAuthority</module>
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> d5c8545 (feat:add a CertificationAuthority)
-=======
->>>>>>> 2d2d21e (feat:add MD5Encoder and Security config)
-=======
         <module>IdWorker</module>
->>>>>>> b2e9701 (feat: add Certification config)
+
     </modules>
     <repositories>
         <repository>
@@ -55,6 +49,8 @@
         <surefire.plugin.version>3.0.0-M5</surefire.plugin.version> <!-- 添加 surefire 插件版本号 -->
         <spring-boot.plugin.version>3.1.1</spring-boot.plugin.version> <!-- 添加 spring-boot 插件版本号 -->
         <mybatis-plus.version>3.5.5</mybatis-plus.version>
+        <spring.security.oauth>6.2.0</spring.security.oauth>
+        <spring.authorization.oauth>1.1.0</spring.authorization.oauth>
     </properties>
 
     <dependencyManagement>
@@ -63,7 +59,7 @@
             <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-oauth2-client</artifactId>
-                <version>${spring.boot.version}</version>
+                <version>${spring.security.oauth}</version>
             </dependency>
 
             <dependency>
@@ -71,6 +67,19 @@
                 <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
                 <version>${spring.boot.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-oauth2-jose</artifactId>
+                <version>${spring.security.oauth}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-authorization-server</artifactId>
+                <version>${spring.authorization.oauth}</version> <!-- 使用最新版本 -->
+            </dependency>
+
 
             <dependency>
                 <groupId>com.baomidou</groupId>

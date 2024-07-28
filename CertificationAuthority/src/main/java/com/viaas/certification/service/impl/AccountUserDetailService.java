@@ -54,11 +54,17 @@ public class AccountUserDetailService implements UserDetailsManager {
 
     @Override
     public void changePassword(String oldPassword, String newPassword) {
+        //密码校验
 
+        //更新密码
     }
 
     @Override
     public boolean userExists(String username) {
+        UserDTO userDTO = userService.getUserByAccount(username);
+        if(userDTO!=null){
+            return true;
+        }
         return false;
     }
 }
