@@ -20,6 +20,7 @@ public class MD5Encoder implements PasswordEncoder {
         if(ObjectUtils.isEmpty(input)||StringUtils.isEmpty(hash)){
 
         }
-         return hash.equals(Arrays.toString(DigestUtils.md5Digest(input.toString().getBytes())));
+        return input.equals(hash);
+//         return hash.equals(Arrays.toString(DigestUtils.md5Digest(input.toString().getBytes())));
     }
 }

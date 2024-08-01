@@ -52,8 +52,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDTO> implements
     @Override
     public UserDTO getUserByAccount(@NonNull String account) {
         UserDTO user = userMapper.selectOne(new QueryWrapper<UserDTO>().eq("account",account));
-        if (user != null) {
-            throw new CertificationException(CertificationCode.USER_EXIST);
+        if (user == null) {
+            throw new CertificationException(CertificationCode.USER_OR_PASSWORD_ERROR);
         }
         return user;
     }
