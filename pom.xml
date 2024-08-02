@@ -10,30 +10,98 @@
     <packaging>pom</packaging>
     <modules>
         <module>DataEngine</module>
-    </modules>
+        <module>DockerManager</module>
+        <module>CertificationAuthority</module>
+        <module>IdWorker</module>
 
+    </modules>
+    <repositories>
+        <repository>
+            <id>ALiYun</id>
+            <url>https://maven.aliyun.com/repository/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
     <properties>
+        <java.version>17</java.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <hutool.version>5.8.22</hutool.version>
-        <lombok.verion>1.18.26</lombok.verion>
+        <lombok.version>1.18.30</lombok.version>
         <druid.version>1.1.20</druid.version>
-        <mybatis.springboot.version>3.0.2</mybatis.springboot.version>
         <mysql.version>8.0.11</mysql.version>
-        <swagger3.version>2.2.0</swagger3.version>
+        <swagger3.ui.version>2.2.0</swagger3.ui.version>
+        <swagger.version>3.0.0</swagger.version>
         <mapper.version>4.2.3</mapper.version>
         <fastjson2.version>2.0.40</fastjson2.version>
-        <persistence.api.version>1.0.2</persistence.api.version>
+        <persistence-api.version>1.0.2</persistence-api.version>
         <spring.boot.test.version>3.1.5</spring.boot.test.version>
         <spring.boot.version>3.2.0</spring.boot.version>
         <spring.cloud.version>2023.0.0</spring.cloud.version>
-        <spring.cloud.alibaba.version>2022.0.0.0-RC2</spring.cloud.alibaba.version>
+        <spring.cloud.alibaba.version>2022.0.0.0</spring.cloud.alibaba.version>
+        <micrometer-tracing.version>1.2.0</micrometer-tracing.version>
+        <micrometer-observation.version>1.12.0</micrometer-observation.version>
+        <feign-micrometer.version>12.5</feign-micrometer.version>
+        <zipkin-reporter-brave.version>2.17.0</zipkin-reporter-brave.version>
+        <surefire.plugin.version>3.0.0-M5</surefire.plugin.version> <!-- 添加 surefire 插件版本号 -->
+        <spring-boot.plugin.version>3.1.1</spring-boot.plugin.version> <!-- 添加 spring-boot 插件版本号 -->
+        <mybatis-plus.version>3.5.5</mybatis-plus.version>
+        <spring.security.oauth>6.2.0</spring.security.oauth>
+        <spring.authorization.oauth>1.1.0</spring.authorization.oauth>
     </properties>
 
-<!--    dependencyManager只声明依赖，并不引入依赖，只是规范-->
     <dependencyManagement>
         <dependencies>
+            <!-- Spring Security -->
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-oauth2-client</artifactId>
+                <version>${spring.security.oauth}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-oauth2-jose</artifactId>
+                <version>${spring.security.oauth}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-authorization-server</artifactId>
+                <version>${spring.authorization.oauth}</version> <!-- 使用最新版本 -->
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-generator</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter-test</artifactId>
+                <version>${mybatis-plus.version}</version>
+                <scope>test</scope>
+            </dependency>
             <!-- springboot 3.2.0 -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -64,7 +132,7 @@
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
-                <version>${mybatis.springboot.version}</version>
+                <version>${mybatis-plus.version}</version>
             </dependency>
             <!-- mysql 数据库驱动-->
             <dependency>
@@ -101,7 +169,12 @@
             <dependency>
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-                <version>${swagger3.version}</version>
+                <version>${swagger3.ui.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-boot-starter</artifactId>
+                <version>${swagger.version}</version> <!-- 注意：使用适合Spring Boot 2.x的版本 -->
             </dependency>
             <!-- hutool -->
             <dependency>
@@ -157,7 +230,6 @@
                 <artifactId>zipkin-reporter-brave</artifactId>
                 <version>${zipkin-reporter-brave.version}</version>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 
@@ -167,8 +239,20 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire.plugin.version}</version>
                 <configuration>
                     <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                    <encoding>UTF-8</encoding>
+                    <forceJavacCompilerUse>true</forceJavacCompilerUse>
                 </configuration>
             </plugin>
         </plugins>

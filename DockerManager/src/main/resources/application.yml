@@ -1,0 +1,33 @@
+server:
+  port: 8888
+  address: 0.0.0.0
+  mysql: 127.0.0.1
+mybatis:
+  config-location: classpath:conf/mybatis-conf.xml
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    auto-mapping-unknown-column-behavior: warning
+    local-cache-scope: session
+    cache-enabled: true
+spring:
+  #  ?????
+  datasource:
+    #    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://${server.mysql}:3306/docker_cloud
+    username: root
+    password: 123456
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
+docker-cloud:
+  userName: "dockerxylyjy"
+  passWord: "docker@123789"
+  email: "xylyjy@gmail.com"
+  #  host: "unix:///var/run/docker.sock"
+  host: "tcp://localhost:2375"
+  url: "https://index.docker.io/v1/"
+  kafkaIp: 127.0.0.1
+  kafkaPort: 9092
+kafka:
+  enable: true
