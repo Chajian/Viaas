@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 @Service
 public class AccountUserDetailService implements UserDetailsManager {
@@ -25,7 +26,7 @@ public class AccountUserDetailService implements UserDetailsManager {
     @Override
     public UserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
         UserDTO userDTO = userService.getUserByAccount(username);
-        if (userDTO == null) {
+        if (ObjectUtils.isEmpty(userDTO)) {
             throw new UsernameNotFoundException("User not found");
         }
         return new UserDetail(userDTO);
