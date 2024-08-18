@@ -1,6 +1,5 @@
 server:
-  port: 8888
-  address: 0.0.0.0
+  port: 8080
   mysql: 127.0.0.1
 mybatis:
   config-location: classpath:conf/mybatis-conf.xml
@@ -11,6 +10,8 @@ mybatis-plus:
     local-cache-scope: session
     cache-enabled: true
 spring:
+  thymeleaf:
+    cache: false
   ssl:
     bundle:
       jks:
@@ -48,7 +49,7 @@ spring:
             client-id: messaging-client
             client-secret: secret
             authorization-grant-type: authorization_code
-            redirect-uri: "http://127.0.0.1:8888/login/oauth2/code/{registrationId}"
+            redirect-uri: "http://127.0.0.1:8080/login/oauth2/code/{registrationId}"
             scope: openid, profile
             client-name: messaging-client-oidc
           messaging-client-authorization-code:
@@ -56,7 +57,7 @@ spring:
             client-id: messaging-client
             client-secret: secret
             authorization-grant-type: authorization_code
-            redirect-uri: "http://127.0.0.1:8888/authorized"
+            redirect-uri: "http://127.0.0.1:8080/authorized"
             scope: message.read,message.write
             client-name: messaging-client-authorization-code
           messaging-client-client-credentials:
@@ -71,7 +72,7 @@ spring:
             client-id: messaging-client
             client-secret: secret
             authorization-grant-type: authorization_code
-            redirect-uri: "http://127.0.0.1:8888/authorized"
+            redirect-uri: "http://127.0.0.1:8080/authorized"
             scope: user.read
             client-name: user-client-authorization-code
           messaging-client-device-code:
@@ -123,3 +124,10 @@ messages:
   base-uri: https://127.0.0.1:8443/messages
 user-messages:
   base-uri: http://127.0.0.1:8091/user/messages
+
+logging:
+  level:
+    root: ERROR
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: DEBUG

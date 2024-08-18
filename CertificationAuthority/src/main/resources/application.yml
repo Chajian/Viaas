@@ -19,7 +19,7 @@ spring:
           messaging-client:
             registration:
               client-id: "messaging-client"
-              client-secret: "{noop}secret"
+              client-secret: "secret"
               client-authentication-methods:
                 - "client_secret_basic"
               authorization-grant-types:
@@ -48,3 +48,9 @@ mybatis-plus:
     auto-mapping-unknown-column-behavior: warning
     local-cache-scope: session
     cache-enabled: true
+logging:
+  level:
+    root: ERROR
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: DEBUG
