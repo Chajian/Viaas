@@ -10,12 +10,12 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomExpection extends RuntimeException implements Serializable {
+public class CustomException extends RuntimeException implements Serializable {
     private Integer code;  //状态编码
 
     private String message; //异常消息
 
-    public CustomExpection(Constants result){
+    public CustomException(Constants result){
         this.code = result.getCode();
         this.message = result.getMsg();
     }

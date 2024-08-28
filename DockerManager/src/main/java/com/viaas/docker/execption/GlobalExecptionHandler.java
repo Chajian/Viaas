@@ -16,10 +16,10 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExecptionHandler {
 
-    @ExceptionHandler(CustomExpection.class)
-    public Result<String> customException(CustomExpection customExpection) {
+    @ExceptionHandler(CustomException.class)
+    public Result<String> customException(CustomException customException) {
 
-        return Result.error(customExpection.getCode(), customExpection.getMessage());
+        return Result.error(customException.getCode(), customException.getMessage());
 
     }
 

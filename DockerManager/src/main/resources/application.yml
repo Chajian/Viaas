@@ -111,8 +111,8 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 docker-cloud:
   userName: "dockerxylyjy"
-  passWord: "docker@123789"
-  email: "xylyjy@gmail.com"
+  passWord: ""
+  email: ""
   #  host: "unix:///var/run/docker.sock"
   host: "tcp://localhost:2375"
   url: "https://index.docker.io/v1/"
