@@ -18,7 +18,7 @@ public class AESECBModeTest {
         System.out.println("原始明文: " + bytesToHex(plainText));
 
         // 加密
-        byte[] encryptedText = AESECB.encrypt(plainText, key);
+        byte[] encryptedText = AESECB.git (plainText, key);
 
         // 打印加密后的密文
         System.out.println("加密后的密文: " + bytesToHex(encryptedText));

@@ -1,5 +1,3 @@
-package unit;
-
 import java.util.Arrays;
 
 public class AESUtils {
@@ -18,11 +16,14 @@ public class AESUtils {
     public static byte[] encrypt(byte[] plainText, byte[] key, byte[] iv, String mode) {
         switch (mode.toUpperCase()) {
             case "ECB":
-                return encryptECB(plainText, key);
+                return AESECB.encrypt(plainText,key);
+//                return encryptECB(plainText, key);
             case "CBC":
-                return encryptCBC(plainText, key, iv);
+                return AESCBC.encrypt(plainText,key,iv);
+//                return encryptCBC(plainText, key, iv);
             case "CTR":
-                return encryptCTR(plainText, key, iv);
+                return AESCTR.process(plainText,key,iv);
+//                return encryptCTR(plainText, key, iv);
             default:
                 throw new IllegalArgumentException("不支持的加密模式: " + mode);
         }
@@ -40,11 +41,15 @@ public class AESUtils {
     public static byte[] decrypt(byte[] cipherText, byte[] key, byte[] iv, String mode) {
         switch (mode.toUpperCase()) {
             case "ECB":
-                return decryptECB(cipherText, key);
+                return AESECB.decrypt(cipherText,key);
+//                return decryptECB(cipherText, key);
             case "CBC":
-                return decryptCBC(cipherText, key, iv);
+                return AESCBC.decrypt(cipherText,key,iv);
+//                return decryptCBC(cipherText, key, iv);
+
             case "CTR":
-                return decryptCTR(cipherText, key, iv);
+                return AESCTR.process(cipherText,key,iv);
+//                return decryptCTR(cipherText, key, iv);
             default:
                 throw new IllegalArgumentException("不支持的解密模式: " + mode);
         }
