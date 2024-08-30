@@ -16,27 +16,37 @@ spring:
     oauth2:
       authorizationserver:
         client:
-          messaging-client:
-            registration:
-              client-id: "messaging-client"
-              client-secret: "secret"
-              client-authentication-methods:
-                - "client_secret_basic"
-              authorization-grant-types:
-                - "authorization_code"
-                - "refresh_token"
-                - "client_credentials"
-              redirect-uris:
-                - "http://127.0.0.1:8080/login/oauth2/code/messaging-client-oidc"
-                - "http://127.0.0.1:8080/authorized"
-              post-logout-redirect-uris:
-                - "http://127.0.0.1:8080/logged-out"
-              scopes:
-                - "openid"
-                - "profile"
-                - "message.read"
-                - "message.write"
-            require-authorization-consent: true
+          container-client: # 容器管理
+            client-id: "container-client"
+            client-secret: "1+6imRIcCvY7WsprnX7W23gv8z9NfykX/ifXBPIkJys="
+            scope: read,write
+            authorization-grant-type:
+              - password
+              - refresh_token
+            redirect-uri: "http://127.0.0.1:8080/login/oauth2/code/container-client"
+            client-authentication-methods:
+              - "client_secret_basic"
+#          messaging-client:
+#            registration:
+#              client-id: "messaging-client"
+#              client-secret: "secret"
+#              client-authentication-methods:
+#                - "client_secret_basic"
+#              authorization-grant-types:
+#                - "authorization_code"
+#                - "refresh_token"
+#                - "client_credentials"
+#              redirect-uris:
+#                - "http://127.0.0.1:8080/login/oauth2/code/messaging-client-oidc"
+#                - "http://127.0.0.1:8080/authorized"
+#              post-logout-redirect-uris:
+#                - "http://127.0.0.1:8080/logged-out"
+#              scopes:
+#                - "openid"
+#                - "profile"
+#                - "message.read"
+#                - "message.write"
+#            require-authorization-consent: true
 snow:
   woker:
     id: 1
@@ -54,3 +64,9 @@ logging:
     org.springframework.web: DEBUG
     org.springframework.security: DEBUG
     org.springframework.security.oauth2: DEBUG
+# 设置令牌的有效期
+token:
+  access-token:
+    validity-seconds: 3600 # 1 hour
+  refresh-token:
+    validity-seconds: 2592000 # 30 days
