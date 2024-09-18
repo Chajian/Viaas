@@ -6,6 +6,8 @@ import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.viaas.certification.encoder.MD5Encoder;
+import com.viaas.certification.entity.UserDTO;
+import com.viaas.certification.service.UserService;
 import com.viaas.certification.service.impl.AccountUserDetailService;
 import com.viaas.idworker.IdWorker;
 import com.viaas.idworker.SnowflakeIdGenerator;
@@ -15,6 +17,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -23,10 +26,21 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
+import org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
+import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
+import org.springframework.security.oauth2.server.authorization.oidc.authentication.OidcUserInfoAuthenticationContext;
+import org.springframework.security.oauth2.server.authorization.oidc.authentication.OidcUserInfoAuthenticationToken;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
+import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -37,10 +51,11 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Collections;
 import java.util.UUID;
+import java.util.function.Function;
 
 @Configuration
-@EnableWebSecurity
 @Order(0)
+@EnableWebSecurity
 public class SecurityConfig {
     @Value("${snow.woker.id:1}")
     private Long workId;
@@ -73,23 +88,41 @@ public class SecurityConfig {
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        OAuth2AuthorizationServerConfigurer authorizationServerConfigurer =
+                new OAuth2AuthorizationServerConfigurer();
+        RequestMatcher endpointsMatcher = authorizationServerConfigurer
+                .getEndpointsMatcher();
+
+        Function<OidcUserInfoAuthenticationContext, OidcUserInfo> userInfoMapper = (context) -> {
+            OidcUserInfoAuthenticationToken authentication = context.getAuthentication();
+            JwtAuthenticationToken principal = (JwtAuthenticationToken) authentication.getPrincipal();
+
+            return new OidcUserInfo(principal.getToken().getClaims());
+        };
+
+        authorizationServerConfigurer
+                .oidc((oidc) -> oidc
+                        .userInfoEndpoint((userInfo) -> userInfo
+                                .userInfoMapper(userInfoMapper)
+                        )
+                );
         http
-                // 基于 token，不需要 csrf
-                .csrf(csrf -> csrf.disable())
-                // 开启跨域以便前端调用接口
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        // 指定某些接口不需要通过验证即可访问。登录接口肯定是不需要认证的
-                        .requestMatchers("/login").permitAll()
-                        .requestMatchers("/oauth/token").permitAll()
-                        // 静态资源，可匿名访问
-                        .requestMatchers(HttpMethod.GET, "/", "/*.html", "/**/*.html", "/**/*.css", "/**/*.js", "/profile/**").permitAll()
-                        .requestMatchers("/swagger-ui.html", "/swagger-resources/**", "/webjars/**", "/*/api-docs", "/druid/**", "/doc.html").permitAll()
-                        // 这里意思是其它所有接口需要认证才能访问
+                .formLogin(Customizer.withDefaults())
+                .securityMatcher(endpointsMatcher)
+                .authorizeHttpRequests((authorize) -> authorize
                         .anyRequest().authenticated()
                 )
-                // 基于 token，不需要 session
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher))
+                .oauth2ResourceServer(resourceServer -> resourceServer
+                        .jwt(Customizer.withDefaults())
+                )
+                .exceptionHandling((exceptions) -> exceptions
+                        .defaultAuthenticationEntryPointFor(
+                                new LoginUrlAuthenticationEntryPoint("/login"),
+                                new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
+                        )
+                )
+                .apply(authorizationServerConfigurer);
 
         return http.build();
     }
@@ -152,11 +185,24 @@ public class SecurityConfig {
 //        return keyPair;
 //    }
 //
-//    //JWT decoder
-//    @Bean
-//    public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
-//        return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
-//    }
+    //JWT decoder
+    @Bean
+    public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
+        return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
+    }
+
+    @Bean
+    public OAuth2TokenCustomizer<JwtEncodingContext> tokenCustomizer(
+            UserService userInfoService) {
+        return (context) -> {
+            if (OidcParameterNames.ID_TOKEN.equals(context.getTokenType().getValue())) {
+                UserDTO userInfo = userInfoService.getUserByAccount(
+                        context.getPrincipal().getName());
+                context.getClaims().claims(claims ->
+                        claims.putAll(userInfo.getOidcUserInfo()));
+            }
+        };
+    }
 //    //认证服务器配置
 //    @Bean
 //    public AuthorizationServerSettings authorizationServerSettings() {
