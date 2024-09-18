@@ -107,7 +107,8 @@ public class SecurityConfig {
                         )
                 );
         http
-                .formLogin(Customizer.withDefaults())
+//                .formLogin(Customizer.withDefaults())
+                .httpBasic(Customizer.withDefaults())
                 .securityMatcher(endpointsMatcher)
                 .authorizeHttpRequests((authorize) -> authorize
                         .anyRequest().authenticated()
