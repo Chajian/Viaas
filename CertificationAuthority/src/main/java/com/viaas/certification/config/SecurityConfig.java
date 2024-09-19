@@ -19,7 +19,10 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -76,7 +79,18 @@ public class SecurityConfig {
      */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(users());
+        authenticationProvider.setPasswordEncoder(passwordEncoder());
+
+        ProviderManager providerManager = new ProviderManager(authenticationProvider);
+        providerManager.setEraseCredentialsAfterAuthentication(false);
+        return providerManager;
+    }
+
+    @Autowired
+    public void configure(AuthenticationManagerBuilder builder) {
+        builder.eraseCredentials(false);
     }
 
 
@@ -199,8 +213,8 @@ public class SecurityConfig {
             if (OidcParameterNames.ID_TOKEN.equals(context.getTokenType().getValue())) {
                 UserDTO userInfo = userInfoService.getUserByAccount(
                         context.getPrincipal().getName());
-                context.getClaims().claims(claims ->
-                        claims.putAll(userInfo.getOidcUserInfo()));
+//                context.getClaims().claims(claims ->
+//                        claims.putAll(userInfo.getOidcUserInfo()));
             }
         };
     }

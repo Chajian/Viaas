@@ -31,7 +31,7 @@ public class UserDTO extends TimeRecord implements Serializable {
     private String pwd;
     /*头像*/
     private String avatar;
-    private Map<String,Object> oidcUserinfo;
+//    private Map<String,Object> oidcUserinfo;
 
     public static UserDTO buildOf(UserDetails userDetails){
         return UserDTO.builder()
@@ -39,10 +39,10 @@ public class UserDTO extends TimeRecord implements Serializable {
                 .pwd(userDetails.getPassword())
                 .build();
     }
-    public Map<String,Object> getOidcUserInfo() {
-        if (oidcUserinfo == null) {
-            oidcUserinfo = OidcUserInfo.builder().name(account).picture(avatar).claim("id", id).build().getClaims();
-        }
-        return oidcUserinfo;
-    }
+//    public Map<String,Object> getOidcUserInfo() {
+//        if (oidcUserinfo == null) {
+//            oidcUserinfo = OidcUserInfo.builder().name(account).picture(avatar).claim("id", id).build().getClaims();
+//        }
+//        return oidcUserinfo;
+//    }
 }

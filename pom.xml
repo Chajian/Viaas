@@ -13,6 +13,7 @@
         <module>DockerManager</module>
         <module>CertificationAuthority</module>
         <module>IdWorker</module>
+        <module>commons</module>
 
     </modules>
     <repositories>
