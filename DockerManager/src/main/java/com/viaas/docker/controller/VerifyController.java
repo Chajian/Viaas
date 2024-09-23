@@ -48,12 +48,12 @@ public class VerifyController {
      * @author sn
      * @version 1.0
      */
-    @Operation(summary = "登录接口")
-    @PostMapping("/login")
-    public Result userLogin(@RequestBody UserDto user) {
-        String userLoginToken = userSerivce.userLogin(user);
-        LoginResult loginResult = userSerivce.getUserLoginInfo(user.getAccount());
-        loginResult.setToken(userLoginToken);
-        return Result.success(Constants.CODE_200, loginResult);
-    }
+//    @Operation(summary = "登录接口")
+//    @PostMapping("/login")
+//    public Result userLogin(@RequestBody UserDto user) {
+//        String userLoginToken = userSerivce.userLogin(user);
+//        LoginResult loginResult = userSerivce.getUserLoginInfo(user.getAccount());
+//        loginResult.setToken(userLoginToken);
+//        return Result.success(Constants.CODE_200, loginResult);
+//    }
 }

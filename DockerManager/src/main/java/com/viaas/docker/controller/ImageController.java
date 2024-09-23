@@ -29,6 +29,9 @@ public class ImageController {
     @Autowired
     private ImageService imageService;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     /**
      * 获取镜像列表
      * author chen
@@ -39,12 +42,12 @@ public class ImageController {
     public Result getImages(@RequestBody(required = false) ImagesParam imagesParam,
                             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         if(imagesParam.isCenter()) {
-            Map<String, Image> imageMap = imageService.getImagesByDatabase(imagesParam, JwtUtil.getUserId(token))
+            Map<String, Image> imageMap = imageService.getImagesByDatabase(imagesParam, jwtUtil.extractUserId(token))
                     .stream()
                     .filter(image -> image.getName() != null)
                     .collect(Collectors.toMap(Image::getName, image -> image, (existingValue, newValue) -> existingValue));
 
-            List<Image> images2 = imageService.dockerObjectToImage(imageService.getImages(imagesParam, JwtUtil.getUserId(token)));
+            List<Image> images2 = imageService.dockerObjectToImage(imageService.getImages(imagesParam, jwtUtil.extractUserId(token)));
             List<ImageVo> imageVos = new ArrayList<>();
             for(Image image : images2){
                 ImageVo imageVo = new ImageVo();
@@ -54,7 +57,7 @@ public class ImageController {
             }
             return Result.success(Constants.CODE_200, imageVos);
         } else {
-            List<Image> images = imageService.dockerObjectToImage(imageService.getImages(imagesParam, JwtUtil.getUserId(token)));
+            List<Image> images = imageService.dockerObjectToImage(imageService.getImages(imagesParam, jwtUtil.extractUserId(token)));
             List<ImageVo> imageVos = new ArrayList<>();
             for(Image image : images){
                 ImageVo imageVo = new ImageVo();
@@ -101,7 +104,7 @@ public class ImageController {
     @Operation(summary = "通过Dockerfile构建镜像")
     @PostMapping("/build")
     public Result build(String imageName, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) throws IOException {
-        String account = JwtUtil.getUserAccount(token);
+        String account = jwtUtil.extractUsername(token);
         return imageService.build(imageName, account);
     }
 }

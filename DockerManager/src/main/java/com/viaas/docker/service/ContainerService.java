@@ -18,7 +18,7 @@ import java.util.List;
 public interface ContainerService extends IService<Container> {
     //查询容器
     Result<List<Container>> getContainers(ContainerParam containerParam, Integer page, Integer pageSize, Integer userId);
-    Result<List<Container>> getContainers(Integer page, Integer pageSize, Integer userId);
+    Result<List<Container>> getContainers(Integer page, Integer pageSize, Long userId);
 
     //管理员接口
     Result<List<Container>> getContainers(Integer page, Integer pageSize);
@@ -52,7 +52,7 @@ public interface ContainerService extends IService<Container> {
      * @param userId
      * @return id不存在返回false||OwnerId！=userId也返回false
      */
-    boolean hasContainer(String id,int userId);
+    boolean hasContainer(String id,Long userId);
 
     /**
      * 获取容器的dashboard

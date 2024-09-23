@@ -51,7 +51,7 @@ public class UserController {
         if(ObjectUtils.isEmpty(userDetails)){
 
         }
-        String token = jwtUtil.generateToken(Sha512DigestUtils.shaHex(authenticationResponse.getName()));
+        String token = jwtUtil.generateToken(userDTO);
 
         OAuth2Token oAuth2Token = new OAuth2Token() {
             @Override

@@ -1,106 +1,64 @@
 package com.viaas.docker.util;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.stereotype.Component;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.DecodedJWT;
-
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
-/**
- * Jwt工具
- * @author Chajian
- *
- * 主要作用：生成令牌
- *
- */
+@Component
 public class JwtUtil {
+    public final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(data);
+    public static final byte[] data= new byte[]{61, -124, -13, 30, 82, -19, 63, 41, -60, -107, 19, 6, 72, 5, -77, -62, -95, 19, 127, -30, 48, -121, -15, -16, 92, 42, 11, 61, 11, -15, -71, 106};
 
-    /**
-     * token 验证码存在时间
-     * 10分钟
-     * */
-    private static final long EXPIRE_TIME = 100*600*10000;
-    /**密钥*/
-    private static final String SECRET = "SHIRO+JWT+DOCKER+CS";
+//    private String SECRET_KEY = "secretasdasdasdasd123123123123asdfsdfsdfsdfsdfsdfsdf";  // You should store this in a secure way
 
-    /**
-     * 通过account来生成token字符串
-     * @param account 账号
-     * @return
-     */
-    public static String sign(String account,int id){
-        Date date = new Date(System.currentTimeMillis()+EXPIRE_TIME);
-
-        Algorithm algorithm = Algorithm.HMAC256(account+SECRET);
-        HashMap<String,Object> header = new HashMap<>(2);
-        header.put("typ","JWT");
-        header.put("alg","HS256");
-        return JWT.create()
-                .withHeader(header)
-                .withClaim("account",account)
-                .withClaim("id",id)
-                .withExpiresAt(date).sign(algorithm);
+    public String extractUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
     }
 
-    /**
-     * 通过token和用户账号来验证请求
-     * @param token token值
-     * @return 验证成功返回true，否则返回false
-     */
-    public static boolean verity(String token){
-        String account = JwtUtil.getUserAccount(token);
-        int id = JwtUtil.getUserId(token);
-        try {
-            Algorithm algorithm = Algorithm.HMAC256(account+SECRET);
-            JWTVerifier verifier = JWT
-                    .require(algorithm)
-                    .withClaim("account",account)
-                    .withClaim("id",id)
-                    .build();
-            verifier.verify(token);
-            return true;
-        }
-        catch (IllegalArgumentException e){
-            return false;
-        }
-        catch (JWTVerificationException e){
-            return false;
-        }
+    public Long extractUserId(String token){return extractAllClaims(token).get("userId",Long.class);};
+
+    public Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
     }
 
-    /**
-     * 获得token中的用户名
-     * @param token token
-     * @return
-     */
-    public static String getUserAccount(String token){
-        try {
-            DecodedJWT jwt = JWT.decode(token);
-            return jwt.getClaim("account").asString();
-        }
-        catch (JWTDecodeException e){
-            return "";
-        }
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
     }
 
-    /**
-     * 获得token中的用户名
-     * @param token token
-     * @return
-     */
-    public static int getUserId(String token){
-        try {
-            DecodedJWT jwt = JWT.decode(token);
-            return jwt.getClaim("id").asInt();
-        }
-        catch (JWTDecodeException e){
-            return -1;
-        }
+    private Claims extractAllClaims(String token) {
+        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
 
+    private Boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
 
+    public String generateToken(String username) {
+        Map<String, Object> claims = new HashMap<>();
+        return createToken(claims, username);
+    }
+
+    private String createToken(Map<String, Object> claims, String subject) {
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hour expiration
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .compact();
+    }
+
+    public Boolean validateToken(String token, String username) {
+        final String extractedUsername = extractUsername(token);
+        return (extractedUsername.equals(username) && !isTokenExpired(token));
+    }
 }

@@ -38,6 +38,9 @@ public class MixStatisticController {
     @Autowired
     PacketMapper packetMapper;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     /**
      * 获取硬件信息通过容器Id
      * @return
@@ -45,7 +48,7 @@ public class MixStatisticController {
     @Operation(summary = "获取硬件信息通过容器ID")
     @GetMapping("/get/{containerId}")
     public Result getHardByContainer(@PathVariable("containerId") String containerId, @RequestHeader(HttpHeaders.AUTHORIZATION) String token){
-        if(!containerService.hasContainer(containerId, JwtUtil.getUserId(token)))
+        if(!containerService.hasContainer(containerId, jwtUtil.extractUserId(token)))
             return Result.error(Constants.CODE_400);
 
         Container container = containerMapper.selectOne(new QueryWrapper<Container>().eq("id", containerId));

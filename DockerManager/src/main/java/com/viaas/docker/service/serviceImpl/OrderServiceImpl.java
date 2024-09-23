@@ -175,7 +175,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     }
 
     @Override
-    public List<Order> getAllOrderByUser(int userId) {
+    public List<Order> getAllOrderByUser(Long userId) {
         List<Order> orders = orderMapper.selectList(new QueryWrapper<Order>().eq("user_id",userId));
         return orders;
     }

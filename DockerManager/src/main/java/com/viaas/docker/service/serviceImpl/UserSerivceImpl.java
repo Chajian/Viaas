@@ -107,7 +107,8 @@ public class UserSerivceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         //3.登录成功
         //3.1生成token并返回
-        String token = JwtUtil.sign(one.getAccount(), one.getId());
+//        String token = JwtUtil.sign(one.getAccount(), one.getId());
+        String token  = "";
         return token;
     }
 

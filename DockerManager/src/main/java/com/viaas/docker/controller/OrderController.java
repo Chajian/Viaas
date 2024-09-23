@@ -49,6 +49,9 @@ public class OrderController {
     @Autowired
     ContainerMapper containerMapper;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     //是否开启支付功能
     boolean enablePay = false;
 
@@ -71,7 +74,7 @@ public class OrderController {
         }
 
         //容器重命检测
-        String name = JwtUtil.getUserId(token) + "-" + addContainer.getContainerName();
+        String name = jwtUtil.extractUserId(token) + "-" + addContainer.getContainerName();
         boolean isRepeat = containerMapper.exists(new QueryWrapper<Container>().eq("name_c", name));
         if(isRepeat) {
             return Result.error(Constants.CONTAINER_REPEAT_NAME);
@@ -85,7 +88,7 @@ public class OrderController {
         }
 
         //发送消息
-        AddOrder addOrder = new AddOrder(packetId, JwtUtil.getUserId(token), addContainer, 100);
+        AddOrder addOrder = new AddOrder(packetId, jwtUtil.extractUserId(token), addContainer, 100);
         Order result = orderService.sendMessage(addOrder);
 
         return Result.success(Constants.CODE_200.getCode(), "success", result);
@@ -101,7 +104,7 @@ public class OrderController {
     public Result payOrder(@PathVariable("id") int orderId,
                            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         Order order = orderService.getById(orderId);
-        Integer userId = JwtUtil.getUserId(token);
+        Long userId = jwtUtil.extractUserId(token);
 
         if(enablePay) { //开启支付功能
             Wallet wallet = walletMapper.selectOne(new QueryWrapper<Wallet>().eq("user_id", userId));
@@ -129,6 +132,6 @@ public class OrderController {
     public Result getOrders(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                             @PathVariable(value = "page") Integer page,
                             @PathVariable(value = "pageSize") Integer pageSize) {
-        return Result.success(Constants.CODE_200, orderService.getAllOrderByUser(JwtUtil.getUserId(token)));
+        return Result.success(Constants.CODE_200, orderService.getAllOrderByUser(jwtUtil.extractUserId(token)));
     }
 }

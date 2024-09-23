@@ -65,7 +65,7 @@ public class ContainerServiceImpl extends ServiceImpl<ContainerMapper, Container
     private DockerClient dockerClient;
 
     @Override
-    public Result<List<Container>> getContainers( Integer page, Integer pageSize, Integer userId) {
+    public Result<List<Container>> getContainers( Integer page, Integer pageSize, Long userId) {
         //测试用户
         //状态
         Page<Container> p = new Page<>(page, pageSize);
@@ -375,7 +375,7 @@ public class ContainerServiceImpl extends ServiceImpl<ContainerMapper, Container
 
 
     @Override
-    public boolean hasContainer(String id, int userId) {
+    public boolean hasContainer(String id, Long userId) {
         LambdaQueryWrapper<Container> lambdaQueryWrapper = new LambdaQueryWrapper<>();//条件
         lambdaQueryWrapper.eq(Container::getOwnerId,userId);
         lambdaQueryWrapper.eq(Container::getId,id);

@@ -101,6 +101,10 @@ spring:
             issuer-uri: http://localhost:9000
           spring-tls:
             token-uri: https://localhost:9443/oauth2/token
+      resourceserver:
+        jwt:
+          secret:
+          jwk-set-url: https://localhost:9000/.well-known/jwks.json
   datasource:
     #    type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://${server.mysql}:3306/docker_cloud

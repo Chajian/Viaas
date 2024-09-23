@@ -47,6 +47,9 @@ public class ContainerController {
     @Autowired
     private FileService fileService;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     /***
      *@descript 获取容器列表
      *@param containerParam page 页数，pagesize页大小，
@@ -61,7 +64,7 @@ public class ContainerController {
                                 @PathVariable(value = "page") Integer page,
                                 @PathVariable(value = "pageSize") Integer pageSize,
                                 @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        int userId = JwtUtil.getUserId(token);
+        long userId = jwtUtil.extractUserId(token);
         return containerService.getContainers( page, pageSize, userId);
     }
 
@@ -75,7 +78,7 @@ public class ContainerController {
     @Operation(summary = "创建容器接口")
     @PostMapping("/create")
     public Result createContainer(@RequestBody AddContainer addContainer, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        int userId = JwtUtil.getUserId(token);
+        long userId = jwtUtil.extractUserId(token);
         String containerId = containerService.createContainer(addContainer, userId,null);
         return Result.success(200,"success",containerId);
     }
@@ -90,7 +93,7 @@ public class ContainerController {
     @Operation(summary = "操作容器接口", description = "操作容器接口,status状态有start,stop,pause,restart")
     @PostMapping("/{id}/{status}")
     public Result operateContainer(@PathVariable("id") String containerId, @PathVariable("status") String status,@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        if(!containerService.hasContainer(containerId, JwtUtil.getUserId(token))) {
+        if(!containerService.hasContainer(containerId, jwtUtil.extractUserId(token))) {
             return Result.error(Constants.CODE_400);
         }
 
@@ -103,7 +106,7 @@ public class ContainerController {
     @Operation(summary = "执行sh指令接口")
     @PostMapping("/{id}/exec")
     public Result execContainer(@PathVariable("id") String containerId,@RequestBody ExecParam exec,@RequestHeader(HttpHeaders.AUTHORIZATION) String token){
-        if(!containerService.hasContainer(containerId, JwtUtil.getUserId(token))) {
+        if(!containerService.hasContainer(containerId, jwtUtil.extractUserId(token))) {
             return Result.error(Constants.CODE_400);
         }
         String result = containerService.execCommand(containerId,exec.getCommand(), exec.getLoc());
@@ -121,7 +124,7 @@ public class ContainerController {
     @Operation(summary = "上传文件到容器接口")
     @PostMapping("/upload")
     public Result uploadFileToContainer(@RequestParam("file") MultipartFile multipartFile, @RequestHeader(HttpHeaders.AUTHORIZATION) String token,String containerId,String tagetPath){
-        String account = JwtUtil.getUserAccount(token);
+        String account = jwtUtil.extractUsername(token);
         String savePath = spaceService.getContainerSpace(account,containerId)+tagetPath.replace("/",File.separator);
         try {
             if(!FileUtil.exist(savePath)){
@@ -148,7 +151,7 @@ public class ContainerController {
 
         int lastIndex = targetPath.lastIndexOf('/');
         String fileName = targetPath.substring(lastIndex+1,targetPath.length());
-        String account = JwtUtil.getUserAccount(token);
+        String account = jwtUtil.extractUsername(token);
         String savePath = spaceService.getContainerSpace(account,containerId)+targetPath.substring(0,lastIndex).replace("/",File.separator);
 
         byte[] context =  containerService.downloadFileFromContainer(containerId,targetPath);
@@ -165,7 +168,7 @@ public class ContainerController {
     @Operation(summary = "获取容器文件树接口")
     @PostMapping("/get/file")
     public Result getContainerFileSystem(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @Param("containerId") String containerId, @Param("targetPath") String targetPath){
-        if(!containerService.hasContainer(containerId, JwtUtil.getUserId(token))) {
+        if(!containerService.hasContainer(containerId, jwtUtil.extractUserId(token))) {
             return Result.error(Constants.CODE_400);
         }
         TreeNode treeNode = containerService.getFilesByPath(containerId,targetPath);

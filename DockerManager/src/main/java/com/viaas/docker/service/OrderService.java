@@ -49,5 +49,5 @@ public interface OrderService extends IService<Order> {
      * 获取当前用户相关的order
      * @return
      */
-    public List<Order> getAllOrderByUser(int userId);
+    public List<Order> getAllOrderByUser(Long userId);
 }

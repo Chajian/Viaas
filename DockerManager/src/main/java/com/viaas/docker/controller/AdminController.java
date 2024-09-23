@@ -35,6 +35,9 @@ public class AdminController {
     @Autowired
     private PacketService packetService;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     /***
      *@descript 操纵容器
      *@param  *
@@ -58,7 +61,7 @@ public class AdminController {
     @Operation(summary = "新增容器接口")
     @PostMapping("/containers/create")
     public Result create(@RequestBody AddContainer addContainer, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        long userId = JwtUtil.getUserId(token);
+        long userId = jwtUtil.extractUserId(token);
         containerService.createContainer(addContainer, userId,null);
         return Result.success(200, "创建成功", null);
     }

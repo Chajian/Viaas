@@ -1,4 +1,5 @@
 package com.viaas.certification.service;
+import com.viaas.certification.entity.UserDTO;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -13,7 +14,8 @@ import java.util.function.Function;
 
 @Component
 public class JwtUtil {
-    public final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    public final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(data);
+    public static final byte[] data= new byte[]{61, -124, -13, 30, 82, -19, 63, 41, -60, -107, 19, 6, 72, 5, -77, -62, -95, 19, 127, -30, 48, -121, -15, -16, 92, 42, 11, 61, 11, -15, -71, 106};
 
 //    private String SECRET_KEY = "secretasdasdasdasd123123123123asdfsdfsdfsdfsdfsdfsdf";  // You should store this in a secure way
 
@@ -41,6 +43,12 @@ public class JwtUtil {
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, username);
+    }
+
+    public String generateToken(UserDTO userDTO) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userId",userDTO.getId());
+        return createToken(claims, userDTO.getAccount());
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
