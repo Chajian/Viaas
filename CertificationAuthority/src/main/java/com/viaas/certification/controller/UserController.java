@@ -22,7 +22,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 @RestController()
-@RequestMapping("/user")
+@RequestMapping("/ibs/api/verify")
 public class UserController {
 
     @Autowired
