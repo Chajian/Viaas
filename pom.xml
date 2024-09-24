@@ -14,6 +14,7 @@
         <module>CertificationAuthority</module>
         <module>IdWorker</module>
         <module>commons</module>
+        <module>CertificationAuthorityApi</module>
 
     </modules>
     <repositories>
@@ -52,6 +53,7 @@
         <mybatis-plus.version>3.5.5</mybatis-plus.version>
         <spring.security.oauth>6.2.0</spring.security.oauth>
         <spring.authorization.oauth>1.1.0</spring.authorization.oauth>
+        <io.jwt.version>0.11.5</io.jwt.version>
     </properties>
 
     <dependencyManagement>
@@ -81,7 +83,19 @@
                 <version>${spring.authorization.oauth}</version> <!-- 使用最新版本 -->
             </dependency>
 
+            <!-- JWT Library -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${io.jwt.version}</version>
+            </dependency>
 
+            <!-- JWT Implementation Dependencies -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${io.jwt.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus</artifactId>

@@ -1,5 +1,4 @@
-package com.viaas.certification.service;
-import com.viaas.certification.entity.UserDTO;
+package com.viaas.certification.api.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -23,6 +22,8 @@ public class JwtUtil {
         return extractClaim(token, Claims::getSubject);
     }
 
+    public Long extractUserId(String token){return extractAllClaims(token).get("userId",Long.class);};
+
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
@@ -45,10 +46,8 @@ public class JwtUtil {
         return createToken(claims, username);
     }
 
-    public String generateToken(UserDTO userDTO) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("userId",userDTO.getId());
-        return createToken(claims, userDTO.getAccount());
+    public String generateToken(Map<String, Object> claims) {
+        return createToken(claims, (String) claims.get("account"));
     }
 
     private String createToken(Map<String, Object> claims, String subject) {

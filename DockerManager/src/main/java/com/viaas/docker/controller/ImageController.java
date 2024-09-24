@@ -1,6 +1,7 @@
 package com.viaas.docker.controller;
 
 import com.github.dockerjava.api.command.InspectImageResponse;
+import com.viaas.certification.api.util.JwtUtil;
 import com.viaas.docker.common.Constants;
 import com.viaas.docker.common.Result;
 import com.viaas.docker.entity.Image;
@@ -9,7 +10,6 @@ import com.viaas.docker.entity.dto.PullImages;
 import com.viaas.docker.entity.vo.ImageVo;
 import com.viaas.docker.execption.CustomException;
 import com.viaas.docker.service.ImageService;
-import com.viaas.docker.util.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;

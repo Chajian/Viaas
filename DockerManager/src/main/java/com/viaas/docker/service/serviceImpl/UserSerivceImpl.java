@@ -17,7 +17,6 @@ import com.viaas.docker.service.FileService;
 import com.viaas.docker.service.SpaceService;
 import com.viaas.docker.service.UserSerivce;
 import com.viaas.docker.service.WalletService;
-import com.viaas.docker.util.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,13 +1,10 @@
 package com.viaas.docker.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.viaas.docker.common.Constants;
 import com.viaas.docker.common.Result;
-import com.viaas.docker.entity.User;
 import com.viaas.docker.entity.dto.UserParam;
 import com.viaas.docker.service.SpaceService;
 import com.viaas.docker.service.UserSerivce;
-import com.viaas.docker.util.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;

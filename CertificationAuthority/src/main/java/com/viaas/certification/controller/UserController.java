@@ -1,21 +1,17 @@
 package com.viaas.certification.controller;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.mysql.cj.protocol.a.authentication.Sha256PasswordPlugin;
+import com.viaas.certification.api.util.JwtUtil;
 import com.viaas.certification.entity.MyAuthentication;
 import com.viaas.certification.entity.UserDTO;
-import com.viaas.certification.entity.UserDetail;
-import com.viaas.certification.service.JwtUtil;
 import com.viaas.certification.service.UserService;
 import com.viaas.certification.service.impl.AccountUserDetailService;
 import com.viaas.commons.Constants;
 import com.viaas.commons.Result;
+import com.viaas.commons.util.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.token.Sha512DigestUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.OAuth2Token;
 import org.springframework.util.ObjectUtils;
@@ -51,7 +47,8 @@ public class UserController {
         if(ObjectUtils.isEmpty(userDetails)){
 
         }
-        String token = jwtUtil.generateToken(userDTO);
+
+        String token = jwtUtil.generateToken(MapUtils.convertToMap(userDTO));
 
         OAuth2Token oAuth2Token = new OAuth2Token() {
             @Override
