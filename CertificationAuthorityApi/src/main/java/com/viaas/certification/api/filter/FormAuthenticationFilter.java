@@ -35,7 +35,7 @@ public class FormAuthenticationFilter extends AbstractAuthenticationProcessingFi
     private AuthenticationProvider authenticationProvider;
 
     private JwtUtil jwtUtil;
-    protected FormAuthenticationFilter(RequestMatcher requiresAuthenticationRequestMatcher, AuthenticationProvider authenticationProvider, JwtUtil jwtUtil) {
+    public FormAuthenticationFilter(AuthenticationProvider authenticationProvider, JwtUtil jwtUtil) {
         super(new AntPathRequestMatcher(AUTH_PATH,REQUEST_METHOD));
         this.authenticationProvider = authenticationProvider;
         this.jwtUtil = jwtUtil;
@@ -74,7 +74,8 @@ public class FormAuthenticationFilter extends AbstractAuthenticationProcessingFi
 
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                    return authenticationProvider.authenticate(authenticationToken);
+                    authenticationProvider.authenticate(authenticationToken);
+                    return getAuthenticationManager().authenticate(authenticationToken);
                 }
             }
         }
