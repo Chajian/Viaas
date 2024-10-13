@@ -54,6 +54,7 @@
         <spring.security.oauth>6.2.0</spring.security.oauth>
         <spring.authorization.oauth>1.1.0</spring.authorization.oauth>
         <io.jwt.version>0.11.5</io.jwt.version>
+        <pf4j.version>0.9.0</pf4j.version>
     </properties>
 
     <dependencyManagement>
@@ -88,6 +89,18 @@
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt-api</artifactId>
                 <version>${io.jwt.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.pf4j</groupId>
+                <artifactId>pf4j-spring</artifactId>
+                <version>${pf4j.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-reload4j</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <!-- JWT Implementation Dependencies -->
