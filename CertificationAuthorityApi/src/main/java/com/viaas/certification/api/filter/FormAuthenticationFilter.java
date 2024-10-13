@@ -24,7 +24,6 @@ import java.io.IOException;
 /**
  * verify token by JwtUtil
  */
-@Component
 public class FormAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
     @Value("${AUTH..METHOD}:POST")

@@ -5,6 +5,9 @@ import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import com.viaas.certification.api.filter.FormAuthenticationFilter;
+import com.viaas.certification.api.provider.FormAuthenticationProvider;
+import com.viaas.certification.api.util.JwtUtil;
 import com.viaas.certification.encoder.MD5Encoder;
 import com.viaas.certification.entity.UserDTO;
 import com.viaas.certification.service.UserService;
@@ -42,6 +45,7 @@ import org.springframework.security.oauth2.server.authorization.token.OAuth2Toke
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
@@ -62,6 +66,10 @@ import java.util.function.Function;
 public class SecurityConfig {
     @Value("${snow.woker.id:1}")
     private Long workId;
+    @Autowired
+    private JwtUtil jwtUtil;
+    @Autowired
+    private com.viaas.certification.api.provider.FormAuthenticationProvider FormAuthenticationProvider;
     /**
      * 自定义密码加密方式配置
      * @return 密码加密器
@@ -70,6 +78,7 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder(){
         return new MD5Encoder();
     }
+
 
     /**
      * 获取AuthenticationManager（认证管理器），登录时认证使用
@@ -106,7 +115,8 @@ public class SecurityConfig {
                 new OAuth2AuthorizationServerConfigurer();
         RequestMatcher endpointsMatcher = authorizationServerConfigurer
                 .getEndpointsMatcher();
-
+        //jwt authtication
+        FormAuthenticationFilter formAuthenticationFilter = new FormAuthenticationFilter(FormAuthenticationProvider,jwtUtil);
         Function<OidcUserInfoAuthenticationContext, OidcUserInfo> userInfoMapper = (context) -> {
             OidcUserInfoAuthenticationToken authentication = context.getAuthentication();
             JwtAuthenticationToken principal = (JwtAuthenticationToken) authentication.getPrincipal();
@@ -122,6 +132,7 @@ public class SecurityConfig {
                 );
         http
 //                .formLogin(Customizer.withDefaults())
+                .addFilterAfter(formAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults())
                 .securityMatcher(endpointsMatcher)
                 .authorizeHttpRequests((authorize) -> authorize
