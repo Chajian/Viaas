@@ -15,6 +15,7 @@
         <module>IdWorker</module>
         <module>commons</module>
         <module>CertificationAuthorityApi</module>
+        <module>ImageManager</module>
 
     </modules>
     <repositories>
