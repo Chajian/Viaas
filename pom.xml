@@ -9,13 +9,13 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>DataEngine</module>
-        <module>DockerManager</module>
-        <module>CertificationAuthority</module>
-        <module>IdWorker</module>
-        <module>commons</module>
-        <module>CertificationAuthorityApi</module>
-        <module>ImageManager</module>
+        <module>VS-DataEngine</module>
+        <module>VS-DockerManager</module>
+        <module>VS-CertificationAuthority</module>
+        <module>VS-IdWorker</module>
+        <module>VS-commons</module>
+        <module>VS-CertificationAuthorityApi</module>
+        <module>VS-ImageManager</module>
 
     </modules>
     <repositories>

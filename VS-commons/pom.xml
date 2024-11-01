@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>com.viaas.commons</groupId>
-    <artifactId>commons</artifactId>
+    <artifactId>VS-commons</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

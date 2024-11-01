@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>com.hy.certification</groupId>
-    <artifactId>CertificationAuthority</artifactId>
+    <artifactId>VS-CertificationAuthority</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -25,12 +25,12 @@
         </dependency>
         <dependency>
             <groupId>com.viaas.certification</groupId>
-            <artifactId>IdWorker</artifactId>
+            <artifactId>VS-IdWorker</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.viaas.commons</groupId>
-            <artifactId>commons</artifactId>
+            <artifactId>VS-commons</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -47,7 +47,7 @@
 
         <dependency>
             <groupId>com.viaas.certification.api</groupId>
-            <artifactId>CertificationAuthorityApi</artifactId>
+            <artifactId>VS-CertificationAuthorityApi</artifactId>
             <version>1.0-SNAPSHOT</version>
             <exclusions>
                 <exclusion>

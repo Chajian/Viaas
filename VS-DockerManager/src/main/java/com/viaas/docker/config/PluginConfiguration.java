@@ -1,6 +1,6 @@
 package com.viaas.docker.config;
 
-import com.viaas.docker.plugin.Greetings;
+//import com.viaas.docker.plugin.Greetings;
 import org.pf4j.spring.SpringPluginManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,9 +16,9 @@ public class PluginConfiguration {
         return new SpringPluginManager();
     }
 
-    @Bean
-    @DependsOn("pluginManager")
-    public Greetings greetings() {
-        return new Greetings();
-    }
+//    @Bean
+//    @DependsOn("pluginManager")
+//    public Greetings greetings() {
+//        return new Greetings();
+//    }
 }
