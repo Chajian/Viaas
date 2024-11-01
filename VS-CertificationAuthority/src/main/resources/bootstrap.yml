@@ -1,0 +1,29 @@
+server:
+  port: 9000
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://8.138.15.0:3306/docker_cloud?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: 5a3Fow9ERn7G2KlR
+  application:
+    name: VS-CertificationAuthority
+#  profiles:
+#    active: dev
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${vs.server-addr}
+        #        namespace: e78542dd-f9dc-4eb0-816f-197401a3ea36      #开发环境
+        namespace: ${vs.namespace}      #开发环境
+        group: DEFAULT_GROUP
+      config:
+        server-addr: ${vs.server-addr}
+        file-extension: ${vs.file-extension}
+        import-check:
+          enabled: false
+
+
+
+

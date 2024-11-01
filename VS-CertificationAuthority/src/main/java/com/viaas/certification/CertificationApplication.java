@@ -4,6 +4,7 @@ import com.viaas.certification.api.filter.FormAuthenticationFilter;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.FilterType;
 @SpringBootApplication
 @MapperScan(basePackages = "com.viaas.certification.mapper")
 @ComponentScan(excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = FormAuthenticationFilter.class))
+@EnableDiscoveryClient
 public class CertificationApplication {
     public static void main(String[] args) {
         SpringApplication.run(CertificationApplication.class, args);

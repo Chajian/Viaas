@@ -8,6 +8,7 @@
     <artifactId>Viaas</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
+
     <modules>
         <module>VS-DataEngine</module>
         <module>VS-DockerManager</module>
@@ -16,17 +17,16 @@
         <module>VS-commons</module>
         <module>VS-CertificationAuthorityApi</module>
         <module>VS-ImageManager</module>
-
     </modules>
-    <repositories>
-        <repository>
-            <id>ALiYun</id>
-            <url>https://maven.aliyun.com/repository/public</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-    </repositories>
+
+    <!-- 继承Spring boot工程 -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.0</version>
+    </parent>
+
+
     <properties>
         <java.version>17</java.version>
         <maven.compiler.source>17</maven.compiler.source>
@@ -43,8 +43,9 @@
         <persistence-api.version>1.0.2</persistence-api.version>
         <spring.boot.test.version>3.1.5</spring.boot.test.version>
         <spring.boot.version>3.2.0</spring.boot.version>
-        <spring.cloud.version>2023.0.0</spring.cloud.version>
-        <spring.cloud.alibaba.version>2022.0.0.0</spring.cloud.alibaba.version>
+        <spring.cloud.version>2022.0.0</spring.cloud.version>
+<!--        <spring.cloud.alibaba.version>2022.0.0.0</spring.cloud.alibaba.version>-->
+        <spring.cloud.alibaba.version>2022.0.0.0-RC1</spring.cloud.alibaba.version>
         <micrometer-tracing.version>1.2.0</micrometer-tracing.version>
         <micrometer-observation.version>1.12.0</micrometer-observation.version>
         <feign-micrometer.version>12.5</feign-micrometer.version>
@@ -60,6 +61,41 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.hy.certification</groupId>
+                <artifactId>VS-CertificationAuthority</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.viaas.certification.api</groupId>
+                <artifactId>VS-CertificationAuthorityApi</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.viaas</groupId>
+                <artifactId>VS-DataEngine</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.viaas.commons</groupId>
+                <artifactId>VS-commons</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.viaas.certification.image</groupId>
+                <artifactId>VS-ImageManager</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.viaas</groupId>
+                <artifactId>VS-DockerManager</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.viaas.certification</groupId>
+                <artifactId>VS-IdWorker</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
             <!-- Spring Security -->
             <dependency>
                 <groupId>org.springframework.security</groupId>
@@ -132,13 +168,13 @@
                 <scope>test</scope>
             </dependency>
             <!-- springboot 3.2.0 -->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-parent</artifactId>
-                <version>${spring.boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.springframework.boot</groupId>-->
+<!--                <artifactId>spring-boot-starter-parent</artifactId>-->
+<!--                <version>${spring.boot.version}</version>-->
+<!--                <type>pom</type>-->
+<!--                <scope>import</scope>-->
+<!--            </dependency>-->
             <!-- springcloud 2023.0.0 -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
@@ -261,6 +297,17 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+
+    <repositories>
+        <repository>
+            <id>ALiYun</id>
+            <url>https://maven.aliyun.com/repository/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
 
     <build>
         <plugins>

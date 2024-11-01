@@ -23,15 +23,14 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.viaas.certification</groupId>
             <artifactId>VS-IdWorker</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.viaas.commons</groupId>
             <artifactId>VS-commons</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -39,12 +38,19 @@
             <optional>true</optional>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>com.github.xiaoymin</groupId>-->
-<!--            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>-->
-<!--            <version>4.0.1</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.viaas.certification.api</groupId>
             <artifactId>VS-CertificationAuthorityApi</artifactId>
@@ -74,6 +80,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
             <version>${spring.boot.version}</version>
+        </dependency>
+
+        <!--开启Spring Cloud 应用程序启动时加载bootstrap配置文件-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
         </dependency>
 
         <dependency>
@@ -108,10 +120,6 @@
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-security</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
 
     </dependencies>
